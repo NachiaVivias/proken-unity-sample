@@ -21,6 +21,8 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] public float jumpVelocity = 500.0f;  // ジャンプの大きさ
     [SerializeField] public float walkVelocity = 6.0f;    // 左右移動の速さ
 
+    [SerializeField] public GroundTrigger groundTrigger;  // スクリプト GroundTrigger を持つ GameObject を要求
+
     int jumpCooldownCounter = 0;
 
     Rigidbody2D rigidbodyMain;
@@ -37,11 +39,15 @@ public class PlayerControl : MonoBehaviour
         // キーボードの入力の現在の状態を取得
         var keyboard = Keyboard.current;
 
-        // ジャンプができる状態のときに、スペースキーが押されているとジャンプ
+        // ジャンプができる状態のときに、スペースキーが押されていて、
         if (jumpCooldownCounter <= 0 && keyboard.spaceKey.isPressed){
-            Debug.Log("spaceKey is pressed");
-            rigidbodyMain.AddForce(new Vector2(0.0f, jumpVelocity)); // 上向きに飛ばす
-            jumpCooldownCounter = jumpCooldown; // 次のジャンプは 1 秒後
+            // 接地していれば、ジャンプ
+            if(groundTrigger.judge){
+                Debug.Log("spaceKey is pressed");
+                rigidbodyMain.velocity = new Vector2(rigidbodyMain.velocity.x, 0.0f); // y 方向の速度を 0 にする
+                rigidbodyMain.AddForce(new Vector2(0.0f, jumpVelocity)); // 上向きに飛ばす
+                jumpCooldownCounter = jumpCooldown; // 次のジャンプは 1 秒後
+            }
         }
 
         float xSpeed = 0.0f;
