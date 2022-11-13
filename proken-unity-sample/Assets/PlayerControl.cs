@@ -21,7 +21,9 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] public float jumpVelocity = 500.0f;  // ジャンプの大きさ
     [SerializeField] public float walkVelocity = 6.0f;    // 左右移動の速さ
 
-    [SerializeField] public GroundTrigger groundTrigger;  // スクリプト GroundTrigger を持つ GameObject を要求
+    [SerializeField] public GeneralTrigger groundTrigger; // スクリプト GeneralTrigger を持つ GameObject を要求
+    [SerializeField] public GeneralTrigger leftSideTrigger;
+    [SerializeField] public GeneralTrigger rightSideTrigger;
 
     int jumpCooldownCounter = 0;
 
@@ -52,10 +54,10 @@ public class PlayerControl : MonoBehaviour
 
         float xSpeed = 0.0f;
 
-        if (keyboard.leftArrowKey.isPressed){
+        if (keyboard.leftArrowKey.isPressed && !leftSideTrigger.judge){
             xSpeed += -walkVelocity;
         }
-        if (keyboard.rightArrowKey.isPressed){
+        if (keyboard.rightArrowKey.isPressed && !rightSideTrigger.judge){
             xSpeed += walkVelocity;
         }
 

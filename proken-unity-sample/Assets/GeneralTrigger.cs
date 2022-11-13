@@ -4,7 +4,7 @@ using UnityEngine;
 
 // とてもシンプルな接地判定
 // キャラクターの少し下に当たり判定(Trigger)をつける
-public class GroundTrigger : MonoBehaviour
+public class GeneralTrigger : MonoBehaviour
 {
     // フィールド
     // private なので、外部からアクセスできない
