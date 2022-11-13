@@ -13,15 +13,32 @@ using UnityEngine.InputSystem;
 
 public class PlayerControl : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Rigidbody2D rigidbodyMain;
+    int jumpCooldown = 0; // 次にジャンプ可能なのは何フレーム(1/50秒)後か
+
+    // Start は Update や FixedUpdate が定期的に呼ばれ始める前に 1 度だけ呼ばれる
     void Start()
     {
-        
+        rigidbodyMain = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
+    // Update は毎フレーム呼ばれる
     void Update()
     {
-        
+        // キーボードの入力の現在の状態を取得
+        var keyboard = Keyboard.current;
+
+        // ジャンプができる状態のときに、スペースキーが押されているとジャンプ
+        if (jumpCooldown <= 0 && keyboard.spaceKey.isPressed){
+            Debug.Log("spaceKey is pressed");
+            rigidbodyMain.AddForce(new Vector2(0.0f, 500.0f)); // 上向きに飛ばす
+            jumpCooldown = 50; // 次のジャンプは 1 秒後
+        }
+    }
+
+    // FixedUpdate は 1 秒間に 50 回のペースで呼ばれる
+    void FixedUpdate(){
+        jumpCooldown--;
+        if(jumpCooldown < 0) jumpCooldown = 0;
     }
 }
