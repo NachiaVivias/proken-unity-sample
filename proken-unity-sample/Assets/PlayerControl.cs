@@ -13,8 +13,17 @@ using UnityEngine.InputSystem;
 
 public class PlayerControl : MonoBehaviour
 {
+
+    // フィールド（ class の中の変数のこと） に [SerializeField] をつけると、
+    // このスクリプトをコンポーネントに付けたときにインスペクタからフィールドの値を操作できるようになる
+    
+    [SerializeField] public int jumpCooldown = 50;        // 次にジャンプ可能なのは何フレーム(1/50秒)後か
+    [SerializeField] public float jumpVelocity = 500.0f;  // ジャンプの大きさ
+    [SerializeField] public float walkVelocity = 6.0f;    // 左右移動の速さ
+
+    int jumpCooldownCounter = 0;
+
     Rigidbody2D rigidbodyMain;
-    int jumpCooldown = 0; // 次にジャンプ可能なのは何フレーム(1/50秒)後か
 
     // Start は Update や FixedUpdate が定期的に呼ばれ始める前に 1 度だけ呼ばれる
     void Start()
@@ -29,19 +38,19 @@ public class PlayerControl : MonoBehaviour
         var keyboard = Keyboard.current;
 
         // ジャンプができる状態のときに、スペースキーが押されているとジャンプ
-        if (jumpCooldown <= 0 && keyboard.spaceKey.isPressed){
+        if (jumpCooldownCounter <= 0 && keyboard.spaceKey.isPressed){
             Debug.Log("spaceKey is pressed");
-            rigidbodyMain.AddForce(new Vector2(0.0f, 500.0f)); // 上向きに飛ばす
-            jumpCooldown = 50; // 次のジャンプは 1 秒後
+            rigidbodyMain.AddForce(new Vector2(0.0f, jumpVelocity)); // 上向きに飛ばす
+            jumpCooldownCounter = jumpCooldown; // 次のジャンプは 1 秒後
         }
 
         float xSpeed = 0.0f;
 
         if (keyboard.leftArrowKey.isPressed){
-            xSpeed += -6.0f;
+            xSpeed += -walkVelocity;
         }
         if (keyboard.rightArrowKey.isPressed){
-            xSpeed += 6.0f;
+            xSpeed += walkVelocity;
         }
 
         rigidbodyMain.velocity = new Vector2(xSpeed, rigidbodyMain.velocity.y);
@@ -49,7 +58,7 @@ public class PlayerControl : MonoBehaviour
 
     // FixedUpdate は 1 秒間に 50 回のペースで呼ばれる
     void FixedUpdate(){
-        jumpCooldown--;
-        if(jumpCooldown < 0) jumpCooldown = 0;
+        jumpCooldownCounter--;
+        if(jumpCooldownCounter < 0) jumpCooldownCounter = 0;
     }
 }
