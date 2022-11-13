@@ -34,6 +34,17 @@ public class PlayerControl : MonoBehaviour
             rigidbodyMain.AddForce(new Vector2(0.0f, 500.0f)); // 上向きに飛ばす
             jumpCooldown = 50; // 次のジャンプは 1 秒後
         }
+
+        float xSpeed = 0.0f;
+
+        if (keyboard.leftArrowKey.isPressed){
+            xSpeed += -6.0f;
+        }
+        if (keyboard.rightArrowKey.isPressed){
+            xSpeed += 6.0f;
+        }
+
+        rigidbodyMain.velocity = new Vector2(xSpeed, rigidbodyMain.velocity.y);
     }
 
     // FixedUpdate は 1 秒間に 50 回のペースで呼ばれる
