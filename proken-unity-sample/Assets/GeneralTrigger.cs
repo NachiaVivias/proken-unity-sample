@@ -8,11 +8,12 @@ public class GeneralTrigger : MonoBehaviour
 {
     // フィールド
     // private なので、外部からアクセスできない
-    private bool judgeBuffer = false;
+    // Trigger と重なっている物の個数を管理する
+    private int judgeBuffer = 0;
 
     // プロパティ
     // public なので、外部からアクセスできて、フィールドのように振る舞う
-    public bool judge { get{ return judgeBuffer; } }
+    public bool judge { get{ return judgeBuffer != 0; } }
 
     // Start is called before the first frame update
     void Start()
@@ -29,13 +30,13 @@ public class GeneralTrigger : MonoBehaviour
     // https://docs.unity3d.com/ja/2018.4/ScriptReference/Collision2D.html
 
     private void OnTriggerEnter2D(Collider2D other){
-        judgeBuffer = true;
+        judgeBuffer++;
     }
 
     private void OnTriggerStay2D(Collider2D other){
     }
 
     private void OnTriggerExit2D(Collider2D other){
-        judgeBuffer = false;
+        judgeBuffer--;
     }
 }
